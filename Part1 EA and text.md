@@ -163,12 +163,12 @@ Text editing is a very important part of making hacks. Without it, you'd just be
 
 Head on over to the text folder, and take a look at what we have:
 
--textprocess: This is the Event Assembler of text. It takes the text buildfile as an input, and puts out all the things necessary for inserting text into the ROM
--text_buildfile: This is the ROM build event file of text. textprocess uses it to figure out what text you want, and where you want it to be.
--install text data: This is the installer made by textprocess. For your text to be inserted, you need to include it. There isn't really a reason to touch it by hand since text process handles it.
--text definitions: Textprocess makes this to go with text install data so Event Assembler can actually use them.
--_textentries: This is where the text you typed is placed after it's been handled by textprocess.
--ParseDefinitions: The parse definitions are the "dictionary" of codes that you can use to do things like load character portraits, and change how the text is presented.
+-textprocess: This is the Event Assembler of text. It takes the text buildfile as an input, and puts out all the things necessary for inserting text into the ROM  
+-text_buildfile: This is the ROM build event file of text. textprocess uses it to figure out what text you want, and where you want it to be.  
+-install text data: This is the installer made by textprocess. For your text to be inserted, you need to include it. There isn't really a reason to touch it by hand since text process handles it.  
+-text definitions: Textprocess makes this to go with text install data so Event Assembler can actually use them.  
+-_textentries: This is where the text you typed is placed after it's been handled by textprocess.  
+-ParseDefinitions: The parse definitions are the "dictionary" of codes that you can use to do things like load character portraits, and change how the text is presented.  
 
 Okay, now that we know a bit of what these do, let's change some things around, shall we?
 
