@@ -190,16 +190,16 @@ https://feuniverse.us/t/the-ins-and-outs-of-text-editing/6820
 
 Was that a good read or what? (You did read it didn't you?)
 
-You might have noticed that Roshe has hijacked Eirika in the hacked ROM. Sadly, he's still labeled as Eirika. Let's fix that.
+You might have noticed that Roshea has hijacked Eirika in the hacked ROM. Sadly, he's still labeled as Eirika. Let's fix that.
 First things first, we're going to have to find where Eirika's name textID is.
 
 Let's go into the text dump in the Text folder (It's inside of "Useful References" if you're using the easy buildfile)
 Since we know that we're looking for Eirika's name all by itself, let's search for `Eirika[X]`
 
-Now we should have the textID needed. Head over to the text buildfile, and put the name "Roshe" (Or whatever you want really) in Eirika's name textID.
+Now we should have the textID needed. Head over to the text buildfile, and put the name "Roshea" (Or whatever you want really) in Eirika's name textID.
 
 ...Great. Now run MAKE HACK_textonly.cmd, and load up the ROM.
-Now Roshe won't have to suffer from an identity crisis.
+Now Roshea won't have to suffer from an identity crisis.
 
 If you want, there's another way to change Eirika's name.
 You can go to the character editor table (the .csv file), and change Eirika's name value to the label of the text you want. Easy peasy.
