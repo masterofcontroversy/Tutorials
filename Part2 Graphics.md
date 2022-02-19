@@ -155,7 +155,7 @@ Next we'll need the throwing axe item IDs. A quick look in `Event Assembler/EA S
 
 Event Assembler has some macros to help with making animation pointers. you can find them in `Event Assembler/EA Standard Library/Animation Setters.txt`
 
-I also made my own macro for this: `#define AnimPointer(Type,Type_Designation,AnimID) "BYTE Type Type_Designation SHORT AnimID"`
+I also made my own macro for this: `#define AnimPointer(Type,Type_Designation,AnimID) "BYTE Type Type_Designation; SHORT AnimID"`
 
 These do the same thing as BYTE-ing everything in would, only it's easier to read.
 
