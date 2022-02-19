@@ -189,7 +189,7 @@ Now we need to tell the game to actually use this pointer. There are two ways to
 While you're here, give Paladins a default axe rank of at least 1. We need this so Paladins can use axes.
 
 2) You can also use EA's `SetClassAnimation(ClassID,Pointer)` macro. It orgs to the animation pointer part of a class' data and points to a new animation pointer.  
-If you use this method, you'll have to do it before the tables are included. (The tables overwrite the data)
+If you use this method, you'll have to do it after the tables are included. (The tables overwrite the data)
 
 Regardless of how you do it, you need to open the class table to give paladins the ability to use axes/
 
