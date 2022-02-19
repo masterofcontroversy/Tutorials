@@ -1,32 +1,40 @@
-Graphics (Dun, dun, Dunnnnn)
+# Graphics:
 
 So you made it here huh? Can you handle the weight of inserting graphics?
-Inserting graphics isn't really that hard. In fact, it's quite easy once you get it down.
+Inserting graphics isn't really that hard. In fact, it's quite easy once you understand a few rules.
 
 ## Portraits:
 
-Go over to Graphics/Mugs You see that png file? Feel free to take a look at it, but we're going to use something else.
-Find a portrait that you want to insert (The FEU mugging blitzes, and the ultimate graphics repository are great sources), and put it in the Mugs folder.  
+Go over to `Graphics/Mugs` You see that png file? Feel free to take a look at it, but we're going to use something else.
+Find a portrait that you want to insert (The FEU mugging blitzes, and the resource repository are great sources), and put it in the Mugs folder.  
 Now open up `Mug Installer.event` in your text editor of choice.  
-Underneath the `Roshea` label, make a label of your own for your portrait. (Remember. No spaces)  
+Underneath the `Roshea` label, make a label of your own for your portrait. (Remember, no spaces)  
 Now we need to use one of the included tools to compress the .png file. That tool would be PortraitFormatter. Remember what to type when we want to include things right after compressing them?
 
 ```
 ALIGN 4
 YourMug:
-#incext PortraitFormatter "yourmug"
+#incext PortraitFormatter "yourmug.png"
 ```
 Great! Now that the portrait is in there, we just have to assign it so it can be used.
 Time to disect a macro. This is the setMugEntry macro: `setMugEntry(0x2,YourMug,2,5,2,3)`
 
--The first argument is `0x2` this is the slot that this mug will be using.  
--"YourMug" is of course the label that you just made, meaning that what's under it (the mug itself) will be used.  
--The next two arguments (2,5) are the coordinates of the mouth. The game needs this information for the mouth animations.  
--The last two arguments (2,3) are the same thing as the mouth, but for the eyes.  
+-The first argument is `0x2` this is the slot that this mug will be using. (You can use definitions in here, so you could define `MugSlot` as `0x2` then use MugSlot in the macro for the same effect).  
+-`YourMug` is of course the label that you just made, meaning that what's under it (the mug itself) will be used.  
+-The next two arguments `(2,5)` are the coordinates of the mouth. The game needs this information for the mouth animations.  
+-The last two arguments `(2,3)` are the same thing as the mouth, but for the eyes.  
 
 Now run the makehack file, and take a look at the character that uses the portrait you replaced.
 
 There we go! You have inserted your mug! Now for...
+
+## Class Cards:
+
+<!--NOTES: (Dump the class card lz77 compressed, and dump the palette)
+    Remember to try this yourself
+-->
+
+
 
 ## Combat Animations:
 
@@ -38,29 +46,31 @@ Next, you'll need the animation you want to insert. The animation folders hold a
 
 -Animation frames: Combat animations are done in a frame-by-frame style. These are the frames that are used for that animation.  
 -Animation sheets: Same as the animation frames, but in a format that when compressed, the game can use.  
--Animation script: These are used to tell the game what frames of animation to use when, and where. The human readable version in a text version, and there's a bin version. We wan't the .bin version.  
+-Animation script: These are used to tell the game what frames of animation to use when, and where. The human readable version in a .txt file, and there's a .bin version. We need to use the .bin version.  
 
-If you're missing the .bin file, then you can open up FEBuilderGBA, and insert the animation using the .txt script, then export the animation as a dmp.
+If you're missing the .bin file, you can open up FEBuilderGBA, and insert the animation using the .txt script, then export the animation as a bin.
 
 Let's use the the [beta Eirika animations.](https://github.com/Klokinator/FE-Repo/tree/main/Battle%20Animations/Lords%20-%20Vanilla%20and%20Custom/%5BFE8%20Eirika-Base%5D%20%5BF%5D%20T1%20Beta%20Eirika%20Fixed%20by%20Jono%20the%20Red)  
 You can add any valid animation for most classes, but for the sake of this tutorial, I'll be using something we can see instantly.
 
-Run Animation Assembler on the .bin file of your animation. This can be done either by dragging the .bin file and dropping it on AA.exe, or by using the command prompt. <!-- (If you're using the latter, you should already know how to do that) -->
+Run Animation Assembler on the .bin file of your animation. This can be done either by dragging the .bin file and dropping it on AA.exe, or by using the command prompt.  
+NOTE: The .bin file and the animation sheets must be in the same directory.
+
+Okay, now do it again for the other animation (The two animations of interest are sword and unarmed).
 
 After Animation Assembler finishes, you should have a shiny new Installer.event file. Open it up and change this line:
 ```
 AnimTableEntry(0x0) //CHANGE THIS TO THE SLOT YOU ARE REPLACING
 ```
 
-In this case for Eirika, we want to change it to `0x3` for her sword animation, and `0x4` for her unarmed animation.
+In this case for Eirika, we want to change it to `0x3` for her sword animation installer file, and `0x4` for her unarmed animation installer file.
 
-Now open the `Master Animation Installer` file and include the Installer.event files. One thing though...
+Now open the `Master Animation Installer.event` file and include the Installer.event files. One thing though...
 
-Now those labels in the rest of the file? Those are based off of what the .bin is named. This is important because we can't have labels with the same name or else we'll get errors. If we happen to install an animation .bin with the name `Sword`, the labels would match Eirika's sword animation labels.
+Now those labels in the rest of the file? Those are based off of what the .bin is named. This is important because we can't have labels with the same name or else we'll get errors. If we happen to install an animation .bin with the name `Sword`, the labels would match Eirika's sword animation labels and EA will respond by redefining things or throwing errors. We probably don't want that.
 
-One way to fix this is to rename the .bin file something that you probably won't be naming your labels.  
-Another option is to go into the master animation installer file, and include your animation installer files nested in curly braces like so:
-
+One way to fix this is to rename the .bin file something that you probably won't be naming your other labels. (eg. `BetaErikaSwordAnim`)  
+Another option is to go into the master animation installer file, and include your animation installer files nested in curly brackets like so:
 ```
 {
     #include "YourAnimation.event" //Labels are Sword
@@ -69,8 +79,9 @@ Another option is to go into the master animation installer file, and include yo
     #include "YourOtherAnimation.event" //Labels are exactly the same
 }
 ```
+This way, the labels are *local* to what's in those brackets, so you don't need to worry about them being defined across the whole buildfile.
 
-Whatever method you use, you need to open the master animation installer file, and include the .event file that Animation Assembler made.
+Whatever method you use, you need to open the `Master Animation Installer.event` file, and include the .event file that Animation Assembler made.
 
 Great, now start up that makehack file, and have Eirika fight something.
 
@@ -124,9 +135,9 @@ Okay, now that we know all that, let's give paladins axes.
 
 First, download the [paladin axe, and handaxe animations.](https://github.com/Klokinator/FE-Repo/tree/main/Battle%20Animations/Mounted%20-%20Cavs%2C%20Paladins%2C%20Rangers/%5BPaladin-Base%5D%20%5BM%5D%20Vanilla%20%2BWeapons)
 
-Run them through Animation Assembler, and replace the bonewalker's animations for now. (A2, and A3)
+Run them through Animation Assembler, and replace the bonewalker's animations for now. (`0xA2`, and `0xA3`)
 
-We'll still be wanting to use the vanilla paladin's animations since we're just adding axes. Here are the animation IDs for them:
+We'll still be wanting to use the vanilla paladin's animations since we're just adding axes. Here are the animation IDs for them (These definitions aren't included by default):
 ```
 #define PaladinSword 0x3A
 #define PaladinLance 0x3B
@@ -164,19 +175,25 @@ ALIGN 4
 PaladinAnimPoint:
 AnimPointer(Swords, 1, 0x3A)
 AnimPointer(Lances, 1, 0x3B)
-AddHandAxeAnimation(PaladinHandaxeAnim) //Nifty handaxe animation pointer macro
 AnimPointer(Disarmed, 1, 0x3C)
+//Using the bonewalker animation IDs
+AnimPointer(Axes, 1, 0xA2)
+AddHandAxeAnimation(0xA3) //Nifty handaxe animation pointer macro
 EndClassAnimation
 ```
 </details>
 
-Now we need to tell the game to actually use this pointer.  
-Go to the class table, and find the class you want o change the animation pointer of, then go to the `Battle Animation Pointer` column. Then, in that cell type your label name with `|IsPointer` on the end.  
+Now we need to tell the game to actually use this pointer. There are two ways to do it:
+
+1) Go to the class table, and find the class you want o change the animation pointer of, then go to the `Battle Animation Pointer` column. Then, in that cell type your label name with `|IsPointer` on the end.  
 While you're here, give Paladins a default axe rank of at least 1. We need this so Paladins can use axes.
 
-You can also use EA's `SetClassAnimation(ClassID,Pointer)` macro. It orgs to the animation pointer part of a class' data and points to a new animation pointer. If you use this method, you'll have to do it before the tables are included. (The tables overwrite the data)
+2) You can also use EA's `SetClassAnimation(ClassID,Pointer)` macro. It orgs to the animation pointer part of a class' data and points to a new animation pointer.  
+If you use this method, you'll have to do it before the tables are included. (The tables overwrite the data)
 
-Go to the ExampleChapter file, and give Seth an axe, and a handaxe (Make sure he's a paladin)  
+Regardless of how you do it, you need to open the class table to give paladins the ability to use axes/
+
+Go to the `Events/ExampleChapter.event` file, and give Seth an axe, and a handaxe (Make sure he's a paladin)  
 (Since the ExampleChapter doesn't have Seth in it, you can just paste the following under the `Units` label)
 ```
 UNIT Seth Paladin 0x0 Level(2,Ally,0) [5,7] 0x0 0x0 0x0 0x0 [IronAxe, HandAxe] NoAI
@@ -184,14 +201,76 @@ UNIT Seth Paladin 0x0 Level(2,Ally,0) [5,7] 0x0 0x0 0x0 0x0 [IronAxe, HandAxe] N
 
 (Don't get rid of the final `UNIT` at the end. It's to mark the end of the unit list)
 
-Run makehack (fully, so the tables will be updated), and try out Seth with an axe.
+Run makehack (Fully, so the tables will be updated), and try out Seth with an axe.
 
 Good? Good. On to the next thing.
 
-Palettes (Ughhh):
+## Palettes:
 
+## Map Sprites:
 
-Map Sprites:
+Step one: Include map sprites
 
-Okay, now this one is a bit of a doozy
-t
+To insert map sprites, first you need to have a properly formatted map sprite sheet. You can find plenty of them in the graphics repository. Keep in mind there are two sheets you'll need: One for standing map sprites, and one for moving map sprites.
+
+Next, you'll need to put them somewhere and compress them properly. In this case, with lz77 compression using png2dmp. Like so:
+```
+ALIGN 4
+StandingSprite:
+#incext png2dmp --lz77 "StandingSprite.png"
+```
+
+You'll need to do the same for the moving map sprite.
+
+Step two: Point to them in the table
+
+Now that the map sprites are inserted, we have to put them to use.  
+The Easy Buildfile offers two ways to use map sprites. First, I'll cover the CSV method.  
+
+<!-- Keep in mind Vesly removed the functionality of the map sprite CSV table -->
+
+Go to `Tables/Map Sprite`. There, you'll find some CSV tables for map sprites. For now, open `Standing map sprite editor.csv`.  
+Don't mind the `Unknown` columns, we're only concerned about `Size` and `Pointer to graphics`.
+
+Pointer to graphics is self-explanitory. You type in your label name as a pointer.
+
+Size is a bit different. There are three options for size:
+```
+Size0 = 16x16 (16x48 images)
+Size1 = 16x32 (16x96 images)
+Size2 = 32x32 (32x96 images)
+```
+
+Pick one of these options based on the size of your standing map sprite.
+
+Next we have `Misc map sprite editor.csv`.  
+In the `Animation Pointer` column, point to your moving map sprite.
+
+As for the other pointer... I'll get to it (here).
+
+On to the second method courtesy of @Vesly.
+Go to `Graphics/MapSprites`, and open at `Readme.md`. It contains the instructions to use the map sprite tools in the folder.
+
+Remember how I mentioned the `Another Pointer`? Well what it does is decide where each frame of the standing map sprite is going to be (among other things)  
+There isn't *too* much of a guideline for them, and that's beyond the scope of this tutorial anyway. What I will show you is a definition for each AP (Another Pointer) used in FE8U:
+
+```
+//Vanilla FE8 AP definitions
+#define NormalAP        $81C3D7C
+#define GeneralAP       $81C8A80
+#define RangerAP        $81CA124
+#define ArcherAP        $81D0A7C
+#define M_SageAP        $81D1D48
+#define FemaleSniperAP  $81D2714
+#define WyvernRiderAP   $81D403C
+#define WyvernLordAP    $81D5E58
+#define WyvernKnightAP  $81D7CC8
+#define MageAP          $81D8668
+#define F_SageAP        $81D8668
+#define GreatLord       $81C52B4
+#define JournymanAP     $81E173C
+#define DancerAP        $81ED1C8
+#define BardAP          $81E8840
+#define CyclopsAP       $81F49B8
+#define DemonKingAP     $81FD028
+```
