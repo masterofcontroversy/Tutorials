@@ -31,8 +31,8 @@ Once you do that, go to the advanced menu, and click `Skill Custom Build`
 
 In the new window, direct FEBuilder to `MAKE CUSTOM_BUILD.cmd` in your custom build folder,
 and direct FEBuilder to a clean FE8 ROM.  
-[CustomBuild1](<Images/CustomBuild1.png>)  
-[CustomBuild2](<Images/CustomBuild2.png>)
+![](<Images/CustomBuild1.png>)  
+![](<Images/CustomBuild2.png>)
 
 <!--- Figure out skill takeover --->
 
