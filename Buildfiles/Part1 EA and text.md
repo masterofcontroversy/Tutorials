@@ -23,7 +23,7 @@ Root
 |   |-- Animations
 |   |-- Mugs
 |   `-- Palettes
-|-- Map
+|-- Maps
 |   `-- Tilesets
 |-- Music
 |-- Tables
@@ -53,10 +53,10 @@ It's very important to understand how Event Assembler reads instructions. If you
 
 Here's some lingo all the cool FE hacking kids are using nowadays
 
-CurrentOffset  
-    This is where EA is at the moment. the current offset changes as things are done to the ROM, or if you directly go to a specific address. (More on that later)
-    When ever anything is inserted, it's data will always be from the current offset, to however much space it takes up.
-    For example, if the current offset was at 0x20(32 decimal), and I inserted something that was 16 bytes in size, the new current offset would be 0x30(48 decimal)
+### CurrentOffset
+This is where EA is at the moment. the current offset changes as things are done to the ROM, or if you directly go to a specific address. (More on that later)
+Whenever anything is inserted, it's data will always be from the current offset to however much space it takes up.
+For example, if the current offset was at 0x20(32 decimal), and I inserted something that was 16 bytes in size, the new current offset would be 0x30(48 decimal)
     
 ### Byte  
 Bytes are a form of data. Everything in the ROM is in byte form. I'm not going to go in detail about them right now,
