@@ -59,7 +59,8 @@ MyPalette:
 
 <!--* Keep in mind this only works with each icon having their own image-->
 
-There are several ways of inserting item icons, so I'll only be covering two.
+Icons are dumped in the 4bpp format, so you shouldn't use `--lz77` to compress them.  
+There are several ways of inserting item icons, so I'll only be covering two.  
 
 The first method is to use this macro to `ORG` to the item icon table:
 ```
@@ -83,7 +84,27 @@ This makes installation quite simple.
 
 This method is very useful if you have a setup where you can dump an entire group of images automatically (with a script or makefile for example).
 
-<!--TODO: Decide on how to handle sheets-->
+The second method is using icon sheets. Since the icon table is a bunch of icons in a row, you can divide the sheet as many ways as you want.  
+You could do
+```
+PUSH
+ORG IconTable
+#incbin "IconSheet.dmp"
+POP
+```
+or even
+```
+PUSH
+ORG IconTable
+#incbin "IconSheet1.dmp"
+
+#incbin "IconSheet2.dmp"
+
+#incbin "IconSheet3.dmp"
+POP
+```
+Naturally, you can also use `#incext` for the same result
+
 
 ## Portraits
 For inserting portraits, we have tool named `portrait-formatter` that takes a formatted portrait (that looks like [this](https://cdn.discordapp.com/attachments/206588291053649921/821522666720460810/Eirika.png)), and formats it for GBAFE to use.  
@@ -168,7 +189,8 @@ Remember that you need to run Png2Dmp on the same .png file twice with different
 
 ## Map Sprites
 
-To insert map sprites, first you need to have a properly formatted map sprite sheet. You can find plenty of them in the graphics repository. Keep in mind there are two sheets you'll need: One for standing map sprites, and one for moving map sprites.
+To insert map sprites, first you need to have a properly formatted map sprite sheet. You can find plenty of them in the graphics repository.  
+Keep in mind there are two sheets you'll need: One for standing map sprites, and one for moving map sprites.  
 
 Next, you'll need to put them somewhere and compress them properly. In this case, with lz77 compression using png2dmp. Like so:
 ```
@@ -185,7 +207,7 @@ The Easy Buildfile offers two ways to use map sprites. First, I'll cover the CSV
 <!-- Keep in mind Vesly removed the functionality of the map sprite CSV table -->
 
 Go to `Tables/Map Sprite`. There, you'll find some CSV tables for map sprites. For now, open `Standing map sprite editor.csv`.  
-Don't mind the `Unknown` columns, we're only concerned about `Size` and `Pointer to graphics`.
+Don't mind the `Unknown` columns, we're only concerned about `Size` and `Pointer to graphics`.  
 
 Pointer to graphics is self-explanitory. You type in your label name as a pointer.
 
@@ -203,11 +225,11 @@ In the `Animation Pointer` column, point to your moving map sprite.
 
 As for the other pointer (Or `Another Pointer`), that will be explained soon.
 
-On to the second method courtesy of @Vesly.
-Go to `Graphics/MapSprites`, and open at `Readme.md`. It contains the instructions to use the map sprite tools in the folder.
+On to the second method courtesy of @Vesly.  
+Go to `Graphics/MapSprites`, and open at `Readme.md`. It contains the instructions to use the map sprite tools in the folder.  
 
 Remember how I mentioned the `Another Pointer`? Well what it does is decide where each frame of the standing map sprite is going to be (among other things)  
-There isn't much of a guideline for them, and that's beyond the scope of this tutorial anyway. What I will show you is a definition for each AP (Another Pointer) used in FE8U:
+There isn't much of a guideline for them, and that's beyond the scope of this tutorial anyway. What I will show you is a definition for each AP (Another Pointer) used in FE8U:  
 
 ```
 //Vanilla FE8 AP definitions
@@ -270,7 +292,7 @@ first: <Weapon Type> second: <Type Designation> third(short) <AnimationID> repea
 
 -The first byte can be used for one of two things. The first is the weapon type being used, and the second is a specific item.  
 
--The second byte, which I'll call the "Type Designation" is for whether you want all items of the same type to share an animation, or have the animation
+-The second byte, which I'll call the `Type Designation` is for whether you want all items of the same type to share an animation, or have the animation
 play for one item only (Commonly used for throwing axes). The options are:
 ```
 1 = all items of that type.
@@ -279,20 +301,18 @@ play for one item only (Commonly used for throwing axes). The options are:
 
 -The last two bytes are used for the animation ID you want.
 
-The terminator to end the animation pointer list is two words worth of 0 (eg. `0x00000000`). Remember to label your animation pointers (and `ALIGN 4` them too)  
+The terminator to end the animation pointer list is word's worth of 0 (eg. `0x00000000`). Remember to label your animation pointers (and `ALIGN 4` them too)  
 
 Here's an example of Ephraim lord's animation pointer:
 ```
-#define AnimPointer(Type,Type_Designation,AnimID) "BYTE Type Type_Designation; SHORT AnimID"
-
 EphriamLordAnimPointer_ByteVer:
 BYTE $01 $01 $01 $00 $09 $01 $02 $00
-WORD 0 0
+WORD 0
 
 EphriamLordAnimPointer_MacroVer:
-AnimPointer(Lance,1,EphraimLord_Lance) //Using 1 for all lances
-AnimPointer(Unarmed,1,EphraimLord_Unarmed)
-WORD 0 0
+AddClassAnimation(EphraimLord_Lance,Lance,1) //Using 1 for all lances
+AddClassAnimation(EphraimLord_Unarmed,Unarmed,1)
+EndClassAnimation
 ```
 
 EAstdlib has a host of animation pointer macros you can use in `EventAssembler/EAStandardLibrary/AnimationSetters.txt`
@@ -372,12 +392,12 @@ Now you can run pal2EA on your palette file. It should generate `Palette Install
 
 ### Insertion
 
-Before you can insert spell animations, you'll need [Circle's Spell Animation Creator (Or CSA)](https://feuniverse.us/t/fe6-7-8-circles-spell-animation-creator-updated-to-v1-1/1946).
+Before you can insert spell animations, you'll need [Circles' Spell Animation Creator (Or CSA)](https://feuniverse.us/t/fe6-7-8-circles-spell-animation-creator-updated-to-v1-1/1946).
 
 Once you have it extracted and in your buildfile, don't forget to `#include` the `Master Spell Animation Installer.event` file.
 
 Included is a `readme.txt` file with instructions on use. Even though it's there, I'll walk through the process.  
-`CSA_Creator.exe` must have the `grit` folder and the spell animation script and frames in the same directory to work.  
+`CSA_Creator.exe` be in the same directory as the `grit` folder and the spell animation script and frames to work.  
 With this in mind, it might be a good idea to make a copy of `CSA_Creator.exe` and the `grit` folder, and place them in a separate folder for easier copying.  
 
 You'll need a spell animation script and frames to run CSA on. You can get these from the [Fire Emblem Resource Repository](https://github.com/Klokinator/FE-Repo).  
@@ -406,25 +426,26 @@ Dispite this being a CSV, this file represents a list (not a table).
 NOTE: The following applies if you are not using the Skill System
 
 The first thing you should do is go to the top-left cell and replace the address there with `INLINE SpellAssociationList`.  
-`INLINE` is to tell C2EA that this list isn't at a specific address, and `SpellAssociationList` is the label name of the list.
+`INLINE` is to tell C2EA that this list isn't at a specific address, and `SpellAssociationList` is the label name of the list.  
+Doing this will also repoint the original spell association list automatically, so you won't need to do it yourself.  
 
 Next, you need to add a terminator to the end of the list. Copy [this row](https://github.com/FireEmblemUniverse/SkillSystem_FE8/blob/master/Tables/NightmareModules/Items/SpellAssociationList.csv#L163) from the Skill System repository and add it to the end of the .CSV file.
 
 NOTE: Okay, back to where things apply everywhere.
 
 Make a new row right before the TERMINATOR row.  
-Now fill in the data you want in each column. The names are inconsistent across the Easy Buildfile and the Skillsystem, so I'll be covering the Easy Buildfile names:
+Now fill in the data you want in each column. The names are inconsistent across the Easy Buildfile and the Skillsystem, so I'll be covering the Easy Buildfile names first:
 
--	Weapon: The ID of the item you want to display the spell animation for.
--	No. of Chars to Display (1 or 2): Used to determine if this is a battle with two people (for regular combat) or one person (for self-healing).
--	Ranged Animation to Use: The ID of the spell animation you want to be displayed.
--	Ranged Animation Enabled: The second half of the spell animation ID short. Unless you have more than 0xFF animations, you won't need to touch this.
--	Alternate Pointer: Used for special map animations. We don't need it for what we're doing, so just set it to 0x0
--	Return to original position (map): Decides whether the combat display and damage flash are used. If it's set to 0 for a weapon, the game can hang, so set the value to 1.
--	Facing position (map): Used to decide what direction the sprite will be facing during a map animation. 0 is used for weapons.
--	Enemy's flashing colour (map): Decides the color the target will flash when hit during a map animation.
--	##UNKNOWN##: Either unused or padding. They'll be fine just being set to 0
-
-<!--TODO: Make an explanation for the IER version-->
+| EasyBuildfile Name               | SkillSystem Name         | What it does                                                                                             |
+|----------------------------------|--------------------------|----------------------------------------------------------------------------------------------------------|
+| Weapon                           | Item ID                  | The ID of the item you want to display the spell animation for.                                          |
+| No. of Chars to Display (1 or 2) | Chars to Display (1 or 2)| Determines if this is a battle with two people (for combat) or one person (for self-healing)             |
+| Ranged Animation to Use          | Spell Animation          | The ID of the spell animation you want to be displayed.                                                  |
+| Ranged Animation Enabled         |                          | The second half of the spell animation ID short. Unneeded if you have fewer than 255 animations.         |
+| Alternate Pointer                | Map Effect Proc          | Used for special map animations. Should be set to 0 in most cases.                                       |
+| Return to original position (map)| Damage                   | Decides whether the combat display and damage flash are used. Set to 1 for weapons or the game will hang.|
+| Facing position (map)            | Facing Direction (Map)   | Decides what direction sprites will face during map animations. 0 is used for weapons.                   |
+| Enemy's flashing colour (map)    | Color When Hit           | Decides the color the target will flash when hit during a map animation.                                 |
+| ##UNKNOWN##                      | N/A                      | Either unused or padding. They'll be fine just being set to 0.                                           |
 
 With this information in mind, you should be able to fill in the data you need to assign your spell animation.
