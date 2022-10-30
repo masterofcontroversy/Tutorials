@@ -209,7 +209,7 @@ The Easy Buildfile offers two ways to use map sprites. First, I'll cover the CSV
 Go to `Tables/Map Sprite`. There, you'll find some CSV tables for map sprites. For now, open `Standing map sprite editor.csv`.  
 Don't mind the `Unknown` columns, we're only concerned about `Size` and `Pointer to graphics`.  
 
-Pointer to graphics is self-explanitory. You type in your label name as a pointer.
+Pointer to graphics is self-explanitory. You type in your label name as a pointer (`LabelName|IsPointer`).
 
 Size is a bit different. There are three options for size:
 ```
