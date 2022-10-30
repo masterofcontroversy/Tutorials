@@ -290,16 +290,16 @@ Battle animation pointers tell the game what animations to use for what items/we
 Animation ID, Weapon Type/Item ID, Type Designation
 ```
 
+-`Animation ID` is the animation ID you want.
+
 -`Weapon Type/Item ID` is used for one of two things. The first is the weapon type being used, and the second is a specific item.  
 
--`Type Designation` is for whether you want all items of the same type to share an animation, or have the animation
-play for one item only (Commonly used for throwing axes). The options are:
+-`Type Designation` decides whether the last option will be used for weapon type (`Weapon Type`) or a specific item (`Item ID`)  
+The options are:
 ```
 1 = all items of that type.
 0 = Specific item.
 ```
-
--`Animation ID` is the animation ID you want.
 
 The terminator to end the animation pointer list is word's worth of 0 (eg. `0x00000000`). Remember to label your animation pointers (and `ALIGN 4` them too)  
 
