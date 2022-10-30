@@ -287,29 +287,26 @@ One solution is to rename all the labels so they'll be unique, and another is to
 Battle animation pointers tell the game what animations to use for what items/weapons. They follow this format:
 
 ```
-first: <Weapon Type> second: <Type Designation> third(short) <AnimationID> repeat
+Animation ID, Weapon Type/Item ID, Type Designation
 ```
 
--The first byte can be used for one of two things. The first is the weapon type being used, and the second is a specific item.  
+-`Weapon Type/Item ID` is used for one of two things. The first is the weapon type being used, and the second is a specific item.  
 
--The second byte, which I'll call the `Type Designation` is for whether you want all items of the same type to share an animation, or have the animation
+-`Type Designation` is for whether you want all items of the same type to share an animation, or have the animation
 play for one item only (Commonly used for throwing axes). The options are:
 ```
 1 = all items of that type.
 0 = Specific item.
 ```
 
--The last two bytes are used for the animation ID you want.
+-`Animation ID` is the animation ID you want.
 
 The terminator to end the animation pointer list is word's worth of 0 (eg. `0x00000000`). Remember to label your animation pointers (and `ALIGN 4` them too)  
 
 Here's an example of Ephraim lord's animation pointer:
 ```
-EphriamLordAnimPointer_ByteVer:
-BYTE $01 $01 $01 $00 $09 $01 $02 $00
-WORD 0
-
-EphriamLordAnimPointer_MacroVer:
+AddClassAnimation(AnimationID,WeaponType,TypeDesignation)
+EphriamLordAnimPointer:
 AddClassAnimation(EphraimLord_Lance,Lance,1) //Using 1 for all lances
 AddClassAnimation(EphraimLord_Unarmed,Unarmed,1)
 EndClassAnimation
@@ -317,7 +314,7 @@ EndClassAnimation
 
 EAstdlib has a host of animation pointer macros you can use in `EventAssembler/EAStandardLibrary/AnimationSetters.txt`
 
-To have the game use your new animation pointer, the class' animation pointer must be changed. This is easily done in the ClassEditor CSV table. Just change the `Animation Pointer` cell for the class you want and type the name of your animation pointer label. (Remember to put `|IsPointer` at the end)
+To have the game use your new animation pointer, it must be assigned to a class in the class table. This is easily done in the ClassEditor CSV table. Go to the `Animation Pointer` column (or `Battle Anims` for skillsys), find the right row for your class, and type the name of your animation pointer label. (Remember to put `|IsPointer` at the end)
 
 You can also org to the class table and point to your animation pointer like so:
 ```
