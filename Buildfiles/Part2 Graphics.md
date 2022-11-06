@@ -383,7 +383,7 @@ Here's a list of what numbers mean what for setting the units' class palettes (S
 6 = Promoted Class 4 (for Ewan)
 ```
 
-Now you can run pal2EA on your palette file. It should generate `Palette Installer.event` and `Palette Setup.event`. The installer file is the one that should be included.
+Now you can run pal2EA on your palette file. It should generate `Palette Installer.event` and `Palette Setup.event`. The setup file is the one that should be included.
 
 ## Spell Animations
 
