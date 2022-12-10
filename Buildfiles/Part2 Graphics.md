@@ -290,11 +290,11 @@ Battle animation pointers tell the game what animations to use for what items/we
 Animation ID, Weapon Type/Item ID, Type Designation
 ```
 
--`Animation ID` is the animation ID you want.
+-	`Animation ID` is the animation ID you want.
 
--`Weapon Type/Item ID` is used for one of two things. The first is the weapon type being used, and the second is a specific item.  
+-	`Weapon Type/Item ID` is used for one of two things. The first is the weapon type being used, and the second is a specific item.  
 
--`Type Designation` decides whether the last option will be used for weapon type (`Weapon Type`) or a specific item (`Item ID`)  
+-	`Type Designation` decides whether the last option will be used for weapon type (`Weapon Type`) or a specific item (`Item ID`)  
 The options are:
 ```
 1 = all items of that type.
@@ -355,7 +355,7 @@ First, you'll need a palette string. It should look something like this:
 
 This is pretty easy to get via FE Recolor, FEBuilder, or...FEditor.
 
-To insert these palettes, we have TeraSpark's [pal2EA](https://feuniverse.us/t/pal2ea-the-buildfile-palette-inserter/2646) tool.
+To insert these palettes, we have Teraspark's [pal2EA](https://feuniverse.us/t/pal2ea-the-buildfile-palette-inserter/2646) tool.
 
 Now let's do a quick rundown of how this works. Let's make a new file and name it something like `Palettes.event`  
 
@@ -418,7 +418,7 @@ If you don't want the spell to dim the background, replace the `setCustomSpell_d
 
 To assign a spell animation to a weapon, go to open `Tables/Item/FE8 Spell Association Editor.csv`.
 
-Dispite this being a CSV, this file represents a list (not a table).  
+Despite this being a CSV, this file represents a list (not a table).  
 
 NOTE: The following applies if you are not using the Skill System
 
