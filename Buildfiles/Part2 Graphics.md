@@ -107,7 +107,7 @@ Naturally, you can also use `#incext` for the same result
 
 
 ## Portraits
-For inserting portraits, we have tool named `portrait-formatter` that takes a formatted portrait (that looks like [this](https://cdn.discordapp.com/attachments/206588291053649921/821522666720460810/Eirika.png)), and formats it for GBAFE to use.  
+For inserting portraits, we have tool named `PortraitFormatter` that takes a formatted portrait (that looks like [this](https://cdn.discordapp.com/attachments/206588291053649921/821522666720460810/Eirika.png)), and formats it for GBAFE to use.  
 
 There's also a macro named `setMugEntry` that is used to add portraits to the portrait table.
 ```
@@ -123,12 +123,12 @@ Insertion of portraits using `#incext` looks like:
 ```
 ALIGN 4
 MyPortrait:
-#incext portrait-formatter "MyPortrait.png"
+#incext PortraitFormatter "MyPortrait.png"
 
 setMugEntry(0x2,MyPortrait,2,5,2,3) //Example use of setMugEntry
 ```
 
-If you run `portrait-formatter` outside of `#incext`, you'll notice that there are four .dmp files that get created.  
+If you run `FortraitFormatter` outside of `#incext`, you'll notice that there are four .dmp files that get created.  
 These must be `#incbin`'d in a particular order. (Protip: If you use the `-o` flag to name an output file, all the .dmp files will be merged together and you can just `#incbin` that).
 
 Insertion of pre-dumped portraits looks like:
